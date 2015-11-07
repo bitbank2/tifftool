@@ -1142,6 +1142,11 @@ char pszTag[256], pszType[256], pszDesc[256], pszCount[256], pszValue[256];
 			fread(buf, 1, 512, iHandle);
 			iMarker = (buf[iOff] << 8) | buf[iOff + 1];
 			iLen = (buf[iOff + 2] << 8) | buf[iOff + 3];
+			if (iMarker < 0xffc0 || iMarker == 0xffff) // invalid, resync
+			{
+				IFD++;
+				continue;
+			}
 			iCount = iLen - 2; // actual data size
 			pszValue[0] = 0; // assume no value to display
 			switch (iMarker)
